@@ -1,10 +1,11 @@
-package com.example.speechtotextfromgitrepo;
+package com.example.speechtotextfromgitrepo.activity;
 
 
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.speechtotextfromgitrepo.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
