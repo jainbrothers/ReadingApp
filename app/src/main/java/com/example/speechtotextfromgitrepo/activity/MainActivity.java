@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.speechtotextfromgitrepo.R;
+import com.example.speechtotextfromgitrepo.builder.ListenBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView txvResult;
     private SpeechRecognizer sr;
+    private ListenBuilder listenBuilder;
     private String TAG = "MainActivityLoggging";
 
     @Override
@@ -39,65 +41,19 @@ public class MainActivity extends AppCompatActivity {
         txvResult = (TextView) findViewById(R.id.txvResult);
 
         sr = SpeechRecognizer.createSpeechRecognizer(this);
-        sr.setRecognitionListener(new listener());
-        startListening();
+        listenBuilder = new ListenBuilder(sr, new ListnerBuilderImpl());
+        listenBuilder.startListening();
     }
 
-    private void startListening() {
+    private class ListnerBuilderImpl implements ListenBuilder.ListenerCallback {
+        public void onResult(final String result) {
+            txvResult.setText(result);
+            listenBuilder.startListening();
+        }
 
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,5);
-        sr.startListening(intent);
-    }
-
-    class listener implements RecognitionListener
-    {
-        public void onReadyForSpeech(Bundle params)
-        {
-            Log.d(TAG, "onReadyForSpeech");
-        }
-        public void onBeginningOfSpeech()
-        {
-            Log.d(TAG, "onBeginningOfSpeech");
-        }
-        public void onRmsChanged(float rmsdB)
-        {
-            Log.d(TAG, "onRmsChanged");
-        }
-        public void onBufferReceived(byte[] buffer)
-        {
-            Log.d(TAG, "onBufferReceived");
-        }
-        public void onEndOfSpeech()
-        {
-            Log.d(TAG, "onEndofSpeech");
-        }
-        public void onError(int error)
-        {
-            Log.d(TAG,  "error " +  error);
-            txvResult.setText("error " + error);
-        }
-        public void onResults(Bundle results)
-        {
-            String str = new String();
-            Log.d(TAG, "onResults " + results);
-            ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-            for (int i = 0; i < data.size(); i++)
-            {
-                Log.d(TAG, "result " + data.get(i));
-                str += data.get(i);
-            }
-            txvResult.setText(data.get(0));
-            startListening();
-        }
-        public void onPartialResults(Bundle partialResults)
-        {
-            Log.d(TAG, "onPartialResults");
-        }
-        public void onEvent(int eventType, Bundle params)
-        {
-            Log.d(TAG, "onEvent " + eventType);
+        public void onError(final Integer errorCode) {
+            txvResult.setText("Error occurred: " + errorCode .toString());
+            listenBuilder.startListening();
         }
     }
 }
