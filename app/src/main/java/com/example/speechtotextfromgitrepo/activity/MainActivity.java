@@ -4,6 +4,7 @@ package com.example.speechtotextfromgitrepo.activity;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.SpeechRecognizer;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class UpdateTextViewImpl implements UpdateTextView {
 
-        public void updateText(@NonNull final String text) {
+        public void updateText(@NonNull final SpannableStringBuilder text) {
             txvResult.setText(text);
         }
     }
