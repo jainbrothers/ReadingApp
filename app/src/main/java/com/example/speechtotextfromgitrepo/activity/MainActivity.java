@@ -1,37 +1,23 @@
 package com.example.speechtotextfromgitrepo.activity;
 
 
-
-import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.speechtotextfromgitrepo.R;
-import com.example.speechtotextfromgitrepo.builder.ListenBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.speech.RecognitionListener;
+import android.speech.SpeechRecognizer;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import android.speech.RecognitionListener;
-import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
-import android.util.Log;
-import android.view.View;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Locale;
+import com.example.speechtotextfromgitrepo.R;
+import com.example.speechtotextfromgitrepo.accessor.RecognitionListenerImpl;
+import com.example.speechtotextfromgitrepo.builder.ListenBuilder;
+import com.example.speechtotextfromgitrepo.interfaces.ListenerCallback;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView txvResult;
-    private SpeechRecognizer sr;
     private ListenBuilder listenBuilder;
+    private ListnerCallbackImpl listnerCallback;
     private String TAG = "MainActivityLoggging";
 
     @Override
@@ -40,12 +26,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         txvResult = (TextView) findViewById(R.id.txvResult);
 
-        sr = SpeechRecognizer.createSpeechRecognizer(this);
-        listenBuilder = new ListenBuilder(sr, new ListnerBuilderImpl());
+        listenBuilder = new ListenBuilder(getSpeechRecognizer());
         listenBuilder.startListening();
     }
 
-    private class ListnerBuilderImpl implements ListenBuilder.ListenerCallback {
+    private SpeechRecognizer getSpeechRecognizer() {
+
+        SpeechRecognizer speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        ListnerCallbackImpl listnerCallback = new ListnerCallbackImpl();
+        RecognitionListener recognitionListener = new RecognitionListenerImpl(listnerCallback);
+        speechRecognizer.setRecognitionListener(recognitionListener);
+        return speechRecognizer;
+    }
+
+    public class ListnerCallbackImpl implements ListenerCallback {
         public void onResult(final String result) {
             txvResult.setText(result);
             listenBuilder.startListening();
