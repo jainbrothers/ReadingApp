@@ -13,6 +13,9 @@
         android:layout_marginTop="100dp"
         android:textColor="#000"
         android:textSize="26sp"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:text="Hello World, this is rahul"
         android:textStyle="normal"/>
 
 <!--    <ImageView-->
