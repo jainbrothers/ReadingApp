@@ -13,7 +13,7 @@ public class Exercise {
     @NonNull
     private final String exerciseText;
     @NonNull
-    private final String[] wordlist;
+    private final ExerciseWord[] exerciseWords;
     @NonNull
     private SpannableStringBuilder processedExercise;
     @NonNull

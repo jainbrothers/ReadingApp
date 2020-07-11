@@ -2,24 +2,15 @@ package com.example.speechtotextfromgitrepo.activity;
 
 
 import android.os.Bundle;
-import android.speech.RecognitionListener;
 import android.speech.SpeechRecognizer;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.speechtotextfromgitrepo.R;
-import com.example.speechtotextfromgitrepo.accessor.RecognitionListenerImpl;
-import com.example.speechtotextfromgitrepo.builder.ListenBuilder;
 import com.example.speechtotextfromgitrepo.component.ReadComponent;
-import com.example.speechtotextfromgitrepo.interfaces.ListenerCallback;
 import com.example.speechtotextfromgitrepo.interfaces.UpdateTextView;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import lombok.NonNull;
 

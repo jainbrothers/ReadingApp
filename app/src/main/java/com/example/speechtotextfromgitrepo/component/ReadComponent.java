@@ -9,7 +9,6 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 
 import com.example.speechtotextfromgitrepo.accessor.RecognitionListenerImpl;
-import com.example.speechtotextfromgitrepo.activity.MainActivity;
 import com.example.speechtotextfromgitrepo.builder.ExerciseBuilder;
 import com.example.speechtotextfromgitrepo.builder.ListenBuilder;
 import com.example.speechtotextfromgitrepo.interfaces.ListenerCallback;
@@ -51,11 +50,11 @@ public class ReadComponent {
     }
 
     private SpannableStringBuilder mergeCurrentWordToProcessedText(int color) {
-        if (exercise.getCurrentIndex() >= exercise.getWordlist().length) {
+        if (exercise.getCurrentIndex() >= exercise.getExerciseWords().length) {
             return exercise.getProcessedExercise();
         }
         SpannableStringBuilder mergedText = new SpannableStringBuilder(exercise.getProcessedExercise());
-        SpannableStringBuilder currentWord = new SpannableStringBuilder(exercise.getWordlist()[exercise.getCurrentIndex()]);
+        SpannableStringBuilder currentWord = new SpannableStringBuilder(exercise.getExerciseWords()[exercise.getCurrentIndex()].getText());
         currentWord.setSpan(new ForegroundColorSpan(color), 0, currentWord.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         Log.d(TAG, "preprocessed text " + mergedText.toString());
         Log.d(TAG, "current word " + currentWord.toString());
@@ -72,15 +71,15 @@ public class ReadComponent {
     }
 
     private void startListening() {
-        if (exercise.getCurrentIndex() < exercise.getWordlist().length) {
+        if (exercise.getCurrentIndex() < exercise.getExerciseWords().length) {
             listenBuilder.startListening();
         }
     }
 
     public class ListnerCallbackImpl implements ListenerCallback {
         public void onResult(final String result) {
-            Log.d(TAG, "onResult " + result + ", current word " + exercise.getWordlist()[exercise.getCurrentIndex()]);
-            if (exercise.getWordlist()[exercise.getCurrentIndex()].equalsIgnoreCase(result)) {
+            Log.d(TAG, "onResult " + result + ", current word " + exercise.getExerciseWords()[exercise.getCurrentIndex()]);
+            if (exercise.getExerciseWords()[exercise.getCurrentIndex()].getText().equalsIgnoreCase(result)) {
                 Log.d(TAG, "successful match");
                 modifyTextOnEvent(Color.GREEN);
             } else {
